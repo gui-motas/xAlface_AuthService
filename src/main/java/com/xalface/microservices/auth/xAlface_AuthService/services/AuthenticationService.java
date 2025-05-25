@@ -45,37 +45,4 @@ public class AuthenticationService implements UserDetailsService {
     public String authenticate(Authentication authentication) {
         return jwtService.generateToken(authentication);
     }
-
-    /**
-     * Deleta um usuário pelo username, identificando se é um admin ou professor
-     * @param username O nome de usuário do usuário a ser deletado
-     * @return true se o usuário foi deletado com sucesso, false caso contrário
-     */
-    public boolean deleteUserByUsername(String username) {
-        try {
-            // Verifica se é um admin
-            var admin = userServiceClient.findAdminByUsername(username);
-            if (admin != null) {
-                // Implementar chamada para deletar admin
-                // userServiceClient.deleteAdmin(username);
-                return true;
-            }
-        } catch (Exception e) {
-            // Se não encontrar como admin, continua
-        }
-
-        try {
-            // Verifica se é um professor
-            var teacher = userServiceClient.findTeacherByUsername(username);
-            if (teacher != null) {
-                // Implementar chamada para deletar professor
-                // userServiceClient.deleteTeacher(username);
-                return true;
-            }
-        } catch (Exception e) {
-            // Se não encontrar como professor, retorna falso
-        }
-
-        return false;
-    }
 }

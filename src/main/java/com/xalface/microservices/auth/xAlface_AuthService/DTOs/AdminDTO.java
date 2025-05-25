@@ -1,15 +1,21 @@
-package com.xalface.microservices.auth.xAlface_AuthService.clients;
+package com.xalface.microservices.auth.xAlface_AuthService.DTOs;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 
+@Getter
 public class AdminDTO implements UserDetails {
     Long id;
+    @Setter
     String username;
+    @Setter
     String name;
+    @Setter
     String password;
 
     @Override
