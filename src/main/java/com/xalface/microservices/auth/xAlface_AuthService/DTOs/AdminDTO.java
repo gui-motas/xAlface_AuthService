@@ -10,6 +10,7 @@ import java.util.List;
 
 @Getter
 public class AdminDTO implements UserDetails {
+
     Long id;
     @Setter
     String username;
@@ -17,6 +18,8 @@ public class AdminDTO implements UserDetails {
     String name;
     @Setter
     String password;
+    @Setter
+    String role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
