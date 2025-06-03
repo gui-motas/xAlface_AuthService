@@ -1,9 +1,0 @@
-C:\Users\rolda\VScode projects\Java\xAlface_AuthService\src\main\java\com\xalface\microservices\auth\xAlface_AuthService\clients\UserServiceClient.java
-C:\Users\rolda\VScode projects\Java\xAlface_AuthService\src\main\java\com\xalface\microservices\auth\xAlface_AuthService\config\SecurityConfig.java
-C:\Users\rolda\VScode projects\Java\xAlface_AuthService\src\main\java\com\xalface\microservices\auth\xAlface_AuthService\controllers\AuthenticationController.java
-C:\Users\rolda\VScode projects\Java\xAlface_AuthService\src\main\java\com\xalface\microservices\auth\xAlface_AuthService\DTOs\AdminDTO.java
-C:\Users\rolda\VScode projects\Java\xAlface_AuthService\src\main\java\com\xalface\microservices\auth\xAlface_AuthService\DTOs\RegisterDTO.java
-C:\Users\rolda\VScode projects\Java\xAlface_AuthService\src\main\java\com\xalface\microservices\auth\xAlface_AuthService\DTOs\TeacherDTO.java
-C:\Users\rolda\VScode projects\Java\xAlface_AuthService\src\main\java\com\xalface\microservices\auth\xAlface_AuthService\services\AuthenticationService.java
-C:\Users\rolda\VScode projects\Java\xAlface_AuthService\src\main\java\com\xalface\microservices\auth\xAlface_AuthService\services\JwtService.java
-C:\Users\rolda\VScode projects\Java\xAlface_AuthService\src\main\java\com\xalface\microservices\auth\xAlface_AuthService\XAlfaceAuthServiceApplication.java

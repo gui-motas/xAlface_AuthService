@@ -1,9 +1,0 @@
-com\xalface\microservices\auth\xAlface_AuthService\DTOs\RegisterDTO.class
-com\xalface\microservices\auth\xAlface_AuthService\config\SecurityConfig.class
-com\xalface\microservices\auth\xAlface_AuthService\DTOs\AdminDTO.class
-com\xalface\microservices\auth\xAlface_AuthService\services\AuthenticationService.class
-com\xalface\microservices\auth\xAlface_AuthService\controllers\AuthenticationController.class
-com\xalface\microservices\auth\xAlface_AuthService\clients\UserServiceClient.class
-com\xalface\microservices\auth\xAlface_AuthService\DTOs\TeacherDTO.class
-com\xalface\microservices\auth\xAlface_AuthService\XAlfaceAuthServiceApplication.class
-com\xalface\microservices\auth\xAlface_AuthService\services\JwtService.class
