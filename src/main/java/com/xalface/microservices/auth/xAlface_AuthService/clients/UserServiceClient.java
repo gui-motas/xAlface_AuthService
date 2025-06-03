@@ -1,6 +1,5 @@
 package com.xalface.microservices.auth.xAlface_AuthService.clients;
 
-
 import com.xalface.microservices.auth.xAlface_AuthService.DTOs.AdminDTO;
 import com.xalface.microservices.auth.xAlface_AuthService.DTOs.TeacherDTO;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "user-service", url = "${user.service.url}")
+@FeignClient(name = "xalface_userService", url = "${user.service.url}")
 public interface UserServiceClient {
 
     @GetMapping("/user/teacher/{id}")
