@@ -4,6 +4,8 @@ import com.xalface.microservices.auth.xAlface_AuthService.clients.UserServiceCli
 import com.xalface.microservices.auth.xAlface_AuthService.model.AdminDTO;
 import com.xalface.microservices.auth.xAlface_AuthService.model.TeacherDTO;
 
+import feign.FeignException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -52,16 +54,25 @@ public class JwtService {
     }
 
     public Long catchUserId(String username) {
-
-        TeacherDTO userT = userServiceClient.findTeacherByUsername(username);
-
-        if (userT == null) {
-            AdminDTO userA = userServiceClient.findAdminByUsername(username);
-
-            return userA.getId();
+        try {
+            TeacherDTO userT = userServiceClient.findTeacherByUsername(username);
+            if (userT != null) {
+                return userT.getId();
+            }
+        } catch (FeignException e) {
+            // Se não encontrar teacher, tenta admin
         }
 
-        return userT.getId();
+        try {
+            AdminDTO userA = userServiceClient.findAdminByUsername(username);
+            if (userA != null) {
+                return userA.getId();
+            }
+        } catch (FeignException e) {
+            // Se não encontrar admin também
+        }
+
+        throw new RuntimeException("Usuário não encontrado: " + username);
     }
 
 }

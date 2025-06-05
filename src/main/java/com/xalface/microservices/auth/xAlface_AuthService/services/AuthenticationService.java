@@ -1,8 +1,8 @@
 package com.xalface.microservices.auth.xAlface_AuthService.services;
 
-import com.xalface.microservices.auth.xAlface_AuthService.clients.UserServiceClient;
 import com.xalface.microservices.auth.xAlface_AuthService.model.AdminDTO;
 import com.xalface.microservices.auth.xAlface_AuthService.model.TeacherDTO;
+import com.xalface.microservices.auth.xAlface_AuthService.clients.UserServiceClient;
 
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +37,8 @@ public class AuthenticationService implements UserDetailsService {
                         .authorities("ROLE_ADMIN")
                         .build();
             }
-        } catch (FeignException.NotFound e) {
-            System.out.println("Usuário não encontrado como admin");
+        } catch (FeignException e) {
+            System.out.println("Usuário não encontrado como admin: " + e.getMessage());
         }
 
         // Tenta buscar como teacher
@@ -52,8 +52,8 @@ public class AuthenticationService implements UserDetailsService {
                         .authorities("ROLE_TEACHER")
                         .build();
             }
-        } catch (FeignException.NotFound e) {
-            System.out.println("Usuário não encontrado como teacher");
+        } catch (FeignException e) {
+            System.out.println("Usuário não encontrado como teacher: " + e.getMessage());
         }
 
         throw new UsernameNotFoundException("Usuário não encontrado: " + username);
