@@ -1,4 +1,4 @@
-package com.xalface.microservices.auth.xAlface_AuthService.DTOs;
+package com.xalface.microservices.auth.xAlface_AuthService.model;
 
 import lombok.Getter;
 import lombok.Setter;

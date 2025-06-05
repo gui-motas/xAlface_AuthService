@@ -1,14 +1,15 @@
 package com.xalface.microservices.auth.xAlface_AuthService.clients;
 
-import com.xalface.microservices.auth.xAlface_AuthService.DTOs.AdminDTO;
-import com.xalface.microservices.auth.xAlface_AuthService.DTOs.TeacherDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "xalface_userService", url = "${user.service.url}")
+import com.xalface.microservices.auth.xAlface_AuthService.model.AdminDTO;
+import com.xalface.microservices.auth.xAlface_AuthService.model.TeacherDTO;
+
+@FeignClient(name = "xalface-userservice", url = "http://26.169.8.125:8081/xalface-userservice")
 public interface UserServiceClient {
 
     @GetMapping("/user/teacher/{id}")
@@ -17,10 +18,10 @@ public interface UserServiceClient {
     @GetMapping("/user/admin/{id}")
     AdminDTO findAdminById(@PathVariable Long id);
 
-    @GetMapping("/user/teacher/{username}")
+    @GetMapping("/user/teacher/username/{username}")
     TeacherDTO findTeacherByUsername(@PathVariable String username);
 
-    @GetMapping("/user/admin/{username}")
+    @GetMapping("/user/admin/username/{username}")
     AdminDTO findAdminByUsername(@PathVariable String username);
 
     @PostMapping("/user/teacher/create")

@@ -1,15 +1,18 @@
 package com.xalface.microservices.auth.xAlface_AuthService.controllers;
 
-import com.xalface.microservices.auth.xAlface_AuthService.DTOs.AdminDTO;
-import com.xalface.microservices.auth.xAlface_AuthService.DTOs.RegisterDTO;
-import com.xalface.microservices.auth.xAlface_AuthService.DTOs.TeacherDTO;
 import com.xalface.microservices.auth.xAlface_AuthService.clients.UserServiceClient;
+import com.xalface.microservices.auth.xAlface_AuthService.model.AdminDTO;
+import com.xalface.microservices.auth.xAlface_AuthService.model.LoginDTO;
+import com.xalface.microservices.auth.xAlface_AuthService.model.RegisterDTO;
+import com.xalface.microservices.auth.xAlface_AuthService.model.TeacherDTO;
 import com.xalface.microservices.auth.xAlface_AuthService.services.AuthenticationService;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,9 +36,17 @@ public class AuthenticationController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(Authentication authentication) {
+    public ResponseEntity<?> login(@RequestBody LoginDTO loginRequest) {
         try {
+            UsernamePasswordAuthenticationToken authToken = 
+                new UsernamePasswordAuthenticationToken(
+                    loginRequest.getUsername(), 
+                    loginRequest.getPassword()
+                );
+            
+            Authentication authentication = authenticationManager.authenticate(authToken);
             String token = authenticationService.authenticate(authentication);
+            
             return ResponseEntity.ok(token);
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -53,14 +64,26 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterDTO credentials) {
         try {
-            if (this.userServiceClient.findAdminByUsername(credentials.getUsername()) != null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Erro: Username já existe");
+            // Verifica se o username já existe como admin
+            try {
+                AdminDTO existingAdmin = this.userServiceClient.findAdminByUsername(credentials.getUsername());
+                if (existingAdmin != null) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body("Erro: Username já existe");
+                }
+            } catch (FeignException.NotFound e) {
+                // Username não existe como admin, pode continuar
             }
 
-            if (this.userServiceClient.findTeacherByUsername(credentials.getUsername()) != null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Erro: Username já existe");
+            // Verifica se o username já existe como teacher
+            try {
+                TeacherDTO existingTeacher = this.userServiceClient.findTeacherByUsername(credentials.getUsername());
+                if (existingTeacher != null) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body("Erro: Username já existe");
+                }
+            } catch (FeignException.NotFound e) {
+                // Username não existe como teacher, pode continuar
             }
 
             String encryptedPassword = passwordEncoder.encode(credentials.getPassword());

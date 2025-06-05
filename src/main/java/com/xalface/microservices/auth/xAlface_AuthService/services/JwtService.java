@@ -1,8 +1,9 @@
 package com.xalface.microservices.auth.xAlface_AuthService.services;
 
-import com.xalface.microservices.auth.xAlface_AuthService.DTOs.AdminDTO;
-import com.xalface.microservices.auth.xAlface_AuthService.DTOs.TeacherDTO;
 import com.xalface.microservices.auth.xAlface_AuthService.clients.UserServiceClient;
+import com.xalface.microservices.auth.xAlface_AuthService.model.AdminDTO;
+import com.xalface.microservices.auth.xAlface_AuthService.model.TeacherDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

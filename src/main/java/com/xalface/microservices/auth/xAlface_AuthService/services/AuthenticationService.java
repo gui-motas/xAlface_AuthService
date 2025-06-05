@@ -1,8 +1,13 @@
 package com.xalface.microservices.auth.xAlface_AuthService.services;
 
 import com.xalface.microservices.auth.xAlface_AuthService.clients.UserServiceClient;
+import com.xalface.microservices.auth.xAlface_AuthService.model.AdminDTO;
+import com.xalface.microservices.auth.xAlface_AuthService.model.TeacherDTO;
+
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,27 +24,39 @@ public class AuthenticationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("Tentando autenticar usuário: " + username);
+        
         // Tenta buscar como admin
         try {
-            var admin = userServiceClient.findAdminByUsername(username);
+            AdminDTO admin = userServiceClient.findAdminByUsername(username);
             if (admin != null) {
-                return admin;
+                System.out.println("Usuário encontrado como admin. Senha hash: " + admin.getPassword());
+                return User.builder()
+                        .username(admin.getUsername())
+                        .password(admin.getPassword())
+                        .authorities("ROLE_ADMIN")
+                        .build();
             }
-        } catch (Exception e) {
-            // Se não encontrar como admin, continua a busca
+        } catch (FeignException.NotFound e) {
+            System.out.println("Usuário não encontrado como admin");
         }
 
-        // Tenta buscar como professor
+        // Tenta buscar como teacher
         try {
-            var teacher = userServiceClient.findTeacherByUsername(username);
+            TeacherDTO teacher = userServiceClient.findTeacherByUsername(username);
             if (teacher != null) {
-                return teacher;
+                System.out.println("Usuário encontrado como teacher. Senha hash: " + teacher.getPassword());
+                return User.builder()
+                        .username(teacher.getUsername())
+                        .password(teacher.getPassword())
+                        .authorities("ROLE_TEACHER")
+                        .build();
             }
-        } catch (Exception e) {
-            // Se não encontrar como professor, lança exceção
+        } catch (FeignException.NotFound e) {
+            System.out.println("Usuário não encontrado como teacher");
         }
 
-        throw new UsernameNotFoundException("Usuário não encontrado");
+        throw new UsernameNotFoundException("Usuário não encontrado: " + username);
     }
 
     public String authenticate(Authentication authentication) {
