@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.xalface.microservices.auth.xAlface_AuthService.model.AdminDTO;
 import com.xalface.microservices.auth.xAlface_AuthService.model.TeacherDTO;
 
-@FeignClient(name = "xalface-userservice", url = "http://26.169.8.125:8081/xalface-userservice")
+@FeignClient(name = "xalface-userservice")
 public interface UserServiceClient {
 
     @GetMapping("/user/teacher/{id}")
