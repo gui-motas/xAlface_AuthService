@@ -5,6 +5,7 @@ import com.xalface.microservices.auth.xAlface_AuthService.model.AdminDTO;
 import com.xalface.microservices.auth.xAlface_AuthService.model.LoginDTO;
 import com.xalface.microservices.auth.xAlface_AuthService.model.RegisterDTO;
 import com.xalface.microservices.auth.xAlface_AuthService.model.TeacherDTO;
+import com.xalface.microservices.auth.xAlface_AuthService.producers.RegisterProducer;
 import com.xalface.microservices.auth.xAlface_AuthService.services.AuthenticationService;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "auth")
 public class AuthenticationController {
+    
+    @Autowired
+    RegisterProducer registerProducer;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -33,6 +37,8 @@ public class AuthenticationController {
 
     @Autowired
     UserServiceClient userServiceClient;
+
+    
 
 
     @PostMapping("/login")
@@ -72,7 +78,7 @@ public class AuthenticationController {
                             .body("Erro: Username já existe");
                 }
             } catch (FeignException.NotFound e) {
-                // Username não existe como admin, pode continuar
+                
             }
 
             // Verifica se o username já existe como teacher
@@ -83,7 +89,7 @@ public class AuthenticationController {
                             .body("Erro: Username já existe");
                 }
             } catch (FeignException.NotFound e) {
-                // Username não existe como teacher, pode continuar
+                
             }
 
             String encryptedPassword = passwordEncoder.encode(credentials.getPassword());
@@ -97,6 +103,9 @@ public class AuthenticationController {
                 teacher.setDepartment(credentials.getDepartment());
 
                 TeacherDTO savedTeacher = userServiceClient.saveTeacher(teacher);
+
+                // Envia a mensagem para o RabbitMQ
+                registerProducer.sendMessage(credentials);
                 return ResponseEntity.ok().body("Professor registrado com sucesso: " + savedTeacher.getName());
 
             } else if (credentials.getRole().equals("ROLE_ADMIN")) {
@@ -106,6 +115,8 @@ public class AuthenticationController {
                 admin.setPassword(credentials.getPassword());
 
                 AdminDTO savedAdmin = userServiceClient.saveAdmin(admin);
+                // Envia a mensagem para o RabbitMQ
+                registerProducer.sendMessage(credentials);
                 return ResponseEntity.ok().body("Administrador registrado com sucesso: " + savedAdmin.getName());
 
             } else {

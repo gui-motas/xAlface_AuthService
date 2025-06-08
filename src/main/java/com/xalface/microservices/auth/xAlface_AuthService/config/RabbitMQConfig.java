@@ -9,7 +9,7 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 @Configuration
 public class RabbitMQConfig {
 
-      @Bean
+    @Bean
     public Jackson2JsonMessageConverter messageConverter() {
         ObjectMapper objectMapper = new ObjectMapper();
         return new Jackson2JsonMessageConverter(objectMapper);
@@ -18,3 +18,6 @@ public class RabbitMQConfig {
     
 
 }
+
+
+
